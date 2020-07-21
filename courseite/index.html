@@ -1,0 +1,157 @@
+<html>
+    <head>
+        <title>Test API Frontend</title>
+    </head>
+    <body>
+        <h1>
+            Test API Frontend Website
+        </h1>
+        
+
+        <div>
+            <button onclick="GetAllCourses()">Get All Course</button>
+        </div>
+
+        <div>
+            <button onclick="GetSingleCourses()">Get Single Course</button>
+        </div>
+
+        <div>
+            <button onclick="UpdateCourses()">Update Course</button>
+        </div>
+
+        <div>
+            <button onclick="DeleteCourses()">Delete Course</button>
+        </div>
+
+        <div>
+            <button onclick="CreateCourses()">Create Course</button>
+        </div>
+		Course ID:<input type='text' size='30' id='coursenumber'></input>
+		Course Name:<input type='text' size='30' id='coursename'></input>
+
+
+
+
+
+
+
+        <div>
+            <div id="show_result"></div>
+        </div>
+
+        <script>
+
+            function GetAllCourses(){
+                // Get all courses
+                var url  = "http://localhost:3000/api/courses";
+                var xhr  = new XMLHttpRequest()
+                xhr.open('GET', url, true)
+                xhr.onload = function () {
+                    var courses = JSON.parse(xhr.responseText);
+                    if (xhr.readyState == 4 && xhr.status == "200") {
+                        console.table(courses);
+                        console.log('success');
+                        
+                        
+                        for( i=0;i<courses.length;i++ ){
+                            document.getElementById('show_result').innerHTML += "<div>ID: " + courses[i].id + "NAME: " + courses[i].name + "</div>";
+                        }
+                        
+
+                    } else {
+                        console.error(courses);
+                        console.log('Error');
+                    }
+                }
+                xhr.send(null);	
+            }
+
+
+            function GetSingleCourses(){
+                // Get a user
+                var url  = "http://localhost:3000/api/courses";
+                var xhr  = new XMLHttpRequest();
+				var num = document.getElementById("coursenumber").value;
+                xhr.open('GET', url+'/'+num, true)
+                xhr.onload = function () {
+                    var users = JSON.parse(xhr.responseText);
+                    if (xhr.readyState == 4 && xhr.status == "200") {
+                        console.table(users);
+                    } else {
+                        console.error(users);
+                    }
+                }
+                xhr.send(null);	
+            }
+
+
+            function CreateCourses(){
+                // Post a user
+                var url = "http://localhost:3000/api/courses";
+
+                var data = {};
+                data.name = document.getElementById("coursename").value;
+                var json = JSON.stringify(data);
+				
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", url, true);
+      		 xhr.setRequestHeader('Content-type','application/json; charset=utf-8');
+                xhr.onload = function () {
+                    var users = JSON.parse(xhr.responseText);
+                    if (xhr.readyState == 4 && xhr.status == "200") {
+                        console.table(users);
+                    } else {
+                        console.error(users);
+                    }
+                }
+                xhr.send(json);	
+            }
+
+
+            function UpdateCourses(){
+                // Update a user
+                var url = "http://localhost:3000/api/courses";
+
+                var data = {};
+                data.name = document.getElementById("coursename").value;
+                var json = JSON.stringify(data);
+
+                var xhr = new XMLHttpRequest();
+				var num = document.getElementById("coursenumber").value;
+                xhr.open("PUT", url+'/'+num , true);
+                xhr.setRequestHeader('Content-type','application/json; charset=utf-8');
+                xhr.onload = function () {
+                    var users = JSON.parse(xhr.responseText);
+                    if (xhr.readyState == 4 && xhr.status == "200") {
+                        console.table(users);
+                    } else {
+                        console.error(users);
+                    }
+                }
+                xhr.send(json);
+            }
+
+
+            function DeleteCourses(){
+            // Delete a user
+            var url = "http://localhost:3000/api/courses";
+            var xhr = new XMLHttpRequest();
+			var num = document.getElementById("coursenumber").value;
+            xhr.open("DELETE", url+'/'+num, true);
+            xhr.onload = function () {
+                var users = JSON.parse(xhr.responseText);
+                if (xhr.readyState == 4 && xhr.status == "200") {
+                    console.table(users);
+                } else {
+                    console.error(users);
+                }
+            }
+            xhr.send(null);
+        }
+
+        </script>
+            
+
+        </body>
+    </html>
